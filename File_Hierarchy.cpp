@@ -1,10 +1,11 @@
 #include <iostream>
+#include <string.h>
 using namespace std; 
 
 // because strcat_s sucks? 
 char* concatenate(char* str1, const char *str2) {
 	char *buf = new char[strlen(str1) + 1];
-	strcpy_s(buf, strlen(str1) + 1, str1);
+	strcpy(buf, str1);
 
 	size_t size = strlen(str1) + strlen(str2) + 1;
 	str1 = new char[size];
@@ -36,19 +37,19 @@ class File { // Abstract class
 public:
 	File(const char* name = " ") {
 		this->name = new char[strlen(name) + 1];
-		strcpy_s(this->name, strlen(name) + 1, name);
+		strcpy(this->name, name);
 	}
 
 	File(const File &other) {
 		this->name = new char[strlen(other.name) + 1];
-		strcpy_s(this->name, strlen(other.name) + 1, other.name);
+		strcpy(this->name, other.name);
 	}
 
 	File& operator=(const File &other) {
 		if (this != &other) {
 			delete name;
 			this->name = new char[strlen(other.name) + 1];
-			strcpy_s(this->name, strlen(other.name) + 1, other.name);
+			strcpy(this->name, other.name);
 		}
 
 		return *this;
@@ -60,7 +61,7 @@ public:
 
 	void rename(const char* name) {
 		this->name = new char[strlen(name)+1];
-		strcpy_s(this->name, strlen(name) + 1, name);
+		strcpy(this->name, name);
 	}
 
 	const char *getName() const {
@@ -81,25 +82,25 @@ class RegularFile : public File {
 public:
 	RegularFile(const char *name, const char *extention, const char *content) : File(name) {
 		this->extention = new char[strlen(extention) + 1];
-		strcpy_s(this->extention, strlen(extention) + 1, extention);
+		strcpy(this->extention , extention);
 		this->content = new char[strlen(content) + 1];
-		strcpy_s(this->content, strlen(content) + 1, content);
+		strcpy(this->content, content);
 	}
 
 	RegularFile(RegularFile const &other) : File(other) {
 		this->extention = new char[strlen(other.extention) + 1];
-		strcpy_s(this->extention, strlen(other.extention) + 1, other.extention);
+		strcpy(this->extention, other.extention);
 		this->content = new char[strlen(other.content) + 1];
-		strcpy_s(this->content, strlen(other.content) + 1, other.content);
+		strcpy(this->content, other.content);
 	}
 
 	RegularFile& operator=(const RegularFile &other) {
 		if (this != &other) {
 			File::operator=(other);
 			this->extention = new char[strlen(other.extention) + 1];
-			strcpy_s(this->extention, strlen(other.extention) + 1, other.extention);
+			strcpy(this->extention, other.extention);
 			this->content = new char[strlen(other.content) + 1];
-			strcpy_s(this->content, strlen(other.content) + 1, other.content);
+			strcpy(this->content, other.content);
 		}
 
 		return *this;
@@ -123,7 +124,7 @@ public:
 	//@Override
 	void operator+=(File *other) {
 		if (other->getFileType() == 0 || other->getFileType() == 2) {
-			content = concatenate(content, dynamic_cast<RegularFile*>(other)->content); // TODO fix with strcpy_s maybe
+			content = concatenate(content, dynamic_cast<RegularFile*>(other)->content); // TODO fix with strcpy maybe
 		} else {
 			cout << "Nothing to be changed." << endl;
 		}
@@ -245,9 +246,9 @@ class User {
 public:
 	User(const char *name = " " ,const char *password = " ") {
 		this->name = new char[strlen(name) + 1];
-		strcpy_s(this->name, strlen(name) + 1, name);
+		strcpy(this->name, name);
 		this->password = new char[strlen(password) + 1];
-		strcpy_s(this->password, strlen(password) + 1, password);
+		strcpy(this->password, password);
 		capacity = 100; 
 		size = 0; 
 		computer = new File *[capacity];
@@ -255,9 +256,9 @@ public:
 
 	User(const User &other) {
 		this->name = new char[strlen(other.name) + 1];
-		strcpy_s(this->name, strlen(other.name) + 1, other.name);
+		strcpy(this->name, other.name);
 		this->password = new char[strlen(other.password) + 1];
-		strcpy_s(this->password, strlen(other.password) + 1, other.password);
+		strcpy(this->password, other.password);
 		capacity = other.capacity;
 		size = other.size;
 		computer = new File *[capacity];
@@ -270,9 +271,9 @@ public:
 	User& operator=(const User &other) {
 		if (this != &other) {
 			this->name = new char[strlen(other.name) + 1];
-			strcpy_s(this->name, strlen(other.name) + 1, other.name);
+			strcpy(this->name, other.name);
 			this->password = new char[strlen(other.password) + 1];
-			strcpy_s(this->password, strlen(other.password) + 1, other.password);
+			strcpy(this->password, other.password);
 			capacity = other.capacity;
 			size = other.size;
 			computer = new File *[capacity];
@@ -337,6 +338,5 @@ int main()
 
 	delete file, file2, files, link;
 
-	system("PAUSE");
 	return 0;
 }
